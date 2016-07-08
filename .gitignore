@@ -1,3 +1,11 @@
+# Eclipse Files
+*.classpath
+*.project
+.settings
+
+# Maven Build Folder
+/target/
+
 *.class
 
 # Mobile Tools for Java (J2ME)
