@@ -27,5 +27,11 @@ public class PathBuilder {
 	public String build(){
 		return path;
 	}
+	
+	public static PathBuilder create(String path){
+		return new PathBuilder(path);
+	}
+	
+	
 
 }

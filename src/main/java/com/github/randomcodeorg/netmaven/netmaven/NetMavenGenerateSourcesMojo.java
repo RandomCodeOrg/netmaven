@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
@@ -26,7 +25,7 @@ import com.github.randomcodeorg.netmaven.netmaven.converter.IkvmInclusionProfile
 import com.github.randomcodeorg.netmaven.netmaven.converter.NetmavenMonoConverter;
 
 @Mojo(name = "netmavenGenerateSources", defaultPhase = LifecyclePhase.GENERATE_SOURCES, requiresDependencyResolution = ResolutionScope.COMPILE, inheritByDefault = true)
-public class NetMavenGenerateSourcesMojo extends AbstractMojo {
+public class NetMavenGenerateSourcesMojo extends AbstractNetMavenMojo {
 
 	@Parameter(required = true, property = "project", readonly = true)
 	private MavenProject mavenProject;
@@ -36,25 +35,21 @@ public class NetMavenGenerateSourcesMojo extends AbstractMojo {
 
 	@Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
 	private String outputDir;
-	
-	@Parameter(name="ikvmRequired", required=false)
+
+	@Parameter(name = "ikvmRequired", required = false)
 	private boolean ikvmRequired = false;
 
 	public NetMavenGenerateSourcesMojo() {
+
 	}
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		Log log = getLog();
-		String ikvmHome = ikvmLocation;
-		if (!checkIKVM(ikvmHome)) {
-			ikvmHome = System.getenv("IKVM_HOME");
-			if (!checkIKVM(ikvmHome)) {
-				throw new MojoFailureException(
-						"The path to the IKVM executables is missing. Specify it using <ikvmHome>PATH</ikvmHome>");
-			} else {
-				log.info("Using environment variable IKVM_HOME");
-			}
+		String ikvmHome = getIKVMLibraryPath();
+		if (ikvmHome == null) {
+			throw new MojoFailureException(
+					"The path to the IKVM executables is missing. Specify it using <ikvmHome>PATH</ikvmHome>");
 		}
 		log.info("Using IKVM at " + ikvmHome);
 		singleLibraryStrategy(log, ikvmHome);
@@ -71,15 +66,16 @@ public class NetMavenGenerateSourcesMojo extends AbstractMojo {
 				jarFiles.add(a.getFile());
 			}
 		}
-		
+
 		String path = buildOutputDir();
-		
+
 		if (jarFiles.size() == 0) {
 			log.info("No libraries to convert");
-			if(ikvmRequired) copyIkvmLibraries(log, ikvmHome, path, IkvmInclusionProfile.FULL);
+			if (ikvmRequired)
+				copyIkvmLibraries(log, ikvmHome, path, IkvmInclusionProfile.FULL);
 			return;
 		}
-		
+
 		ConversionConfig config = new ConversionConfig(log, path, ikvmHome);
 		NetmavenMonoConverter converter = new NetmavenMonoConverter(config);
 		converter.convert(jarFiles);
@@ -97,7 +93,8 @@ public class NetMavenGenerateSourcesMojo extends AbstractMojo {
 		switch (profile) {
 		case FULL:
 			for (File child : ikvmLibsFile.listFiles())
-				if (child.exists() && child.isFile() && child.getName().endsWith(".dll") && child.getName().startsWith("IKVM."))
+				if (child.exists() && child.isFile() && child.getName().endsWith(".dll")
+						&& child.getName().startsWith("IKVM."))
 					toCopy.add(child);
 			break;
 		case MINIMAL:
@@ -110,7 +107,8 @@ public class NetMavenGenerateSourcesMojo extends AbstractMojo {
 				log.warn("Could not copy '" + f.getAbsolutePath() + "' because it does not exist");
 			} else {
 				try {
-					Files.copy(f.toPath(), new File(new PathBuilder(path).sub(f.getName()).build()).toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(f.toPath(), new File(new PathBuilder(path).sub(f.getName()).build()).toPath(),
+							StandardCopyOption.REPLACE_EXISTING);
 				} catch (IOException e) {
 					log.warn("Could not copy '" + f.getAbsolutePath() + "' because an error occured.", e);
 				}
@@ -126,12 +124,6 @@ public class NetMavenGenerateSourcesMojo extends AbstractMojo {
 		if (!f.exists())
 			f.mkdirs();
 		return path;
-	}
-
-	private boolean checkIKVM(String path) {
-		if (path == null || path.isEmpty() || !new File(path).exists())
-			return false;
-		return true;
 	}
 
 }

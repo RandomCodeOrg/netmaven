@@ -30,7 +30,7 @@ import com.github.randomcodeorg.netmaven.netmaven.config.ProjectConfig;
 import com.github.randomcodeorg.netmaven.netmaven.config.Reference;
 
 @Execute(phase = LifecyclePhase.PROCESS_RESOURCES)
-@Mojo(name = "config", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE, inheritByDefault = true)
+@Mojo(name = "config", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, requiresDependencyResolution = ResolutionScope.COMPILE, inheritByDefault = false)
 public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 
 	@Parameter(required = true, property = "project", readonly = true)
