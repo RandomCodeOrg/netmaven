@@ -1,0 +1,4 @@
+install:
+- sudo apt-get install mono
+
+mvn clean test
