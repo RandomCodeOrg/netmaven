@@ -18,6 +18,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<assemblies>
+						<assembly>System.Security</assembly>
 					</assemblies>
 				</configuration>
 			</plugin>
