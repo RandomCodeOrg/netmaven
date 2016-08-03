@@ -1,6 +1,6 @@
 language: java
 install:
-- sudo apt-get install mono
+- sudo apt-get install mono-complete
 
 script:
 - mvn clean test
