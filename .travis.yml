@@ -3,4 +3,4 @@ install:
 - sudo apt-get install mono-complete
 
 script:
-- mvn clean test
+- mvn clean install
