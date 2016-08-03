@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{174CD726-C175-4A1B-AF21-C4BECA8D8BA7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ISS.SimplePDF</RootNamespace>
+    <AssemblyName>SimplePDF</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\SimplePDF.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\..\..\..\..\Desktop\Old\Homepage\Website\Homepage\bin\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AreaDefinition.cs" />
+    <Compile Include="Automation\DocumentTemplate.cs" />
+    <Compile Include="Automation\LogicalContext.cs" />
+    <Compile Include="Automation\Placeholder.cs" />
+    <Compile Include="Automation\SimplePlaceholder.cs" />
+    <Compile Include="Availability.cs" />
+    <Compile Include="DIN6008ADocument.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="DocumentElement.cs" />
+    <Compile Include="Drafts\Draft.cs" />
+    <Compile Include="Drafts\DraftElement.cs" />
+    <Compile Include="Drafts\HTMLElement.cs" />
+    <Compile Include="Drawing\Creatable.cs" />
+    <Compile Include="Drawing\DocumentLine.cs" />
+    <Compile Include="Drawing\DocumentPageProvider.cs" />
+    <Compile Include="Drawing\DocumentWrapper.cs" />
+    <Compile Include="Drawing\IGeneralGraphics.cs" />
+    <Compile Include="Drawing\IGraphicsProvider.cs" />
+    <Compile Include="Drawing\ImagePageProvider.cs" />
+    <Compile Include="Drawing\PageCloser.cs" />
+    <Compile Include="Drawing\PageNumber.cs" />
+    <Compile Include="Drawing\PdfSharpPageProvider.cs" />
+    <Compile Include="Drawing\SystemDraw.cs" />
+    <Compile Include="Drawing\TableCloser.cs" />
+    <Compile Include="Drawing\XGraphicsWrapper.cs" />
+    <Compile Include="Formular\Checkbox.cs" />
+    <Compile Include="Formular\FormGroup.cs" />
+    <Compile Include="Formular\FormLine.cs" />
+    <Compile Include="Formular\FormPositioning.cs" />
+    <Compile Include="Formular\FormRenderContext.cs" />
+    <Compile Include="Formular\IFormElement.cs" />
+    <Compile Include="Formular\InputField.cs" />
+    <Compile Include="Formular\TextField.cs" />
+    <Compile Include="GUI\AdvancedControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\AdvancedControl.Designer.cs">
+      <DependentUpon>AdvancedControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DocumentEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DocumentEditor.Designer.cs">
+      <DependentUpon>DocumentEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DocumentPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DocumentPage.Designer.cs">
+      <DependentUpon>DocumentPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ElementTree.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ElementTree.Designer.cs">
+      <DependentUpon>ElementTree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FormDraw.cs" />
+    <Compile Include="GUI\LineControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\PropertiesEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\PropertiesEditor.Designer.cs">
+      <DependentUpon>PropertiesEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\TextEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\TextEditForm.Designer.cs">
+      <DependentUpon>TextEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLDivConnection.cs" />
+    <Compile Include="HTMLInterpreter.cs" />
+    <Compile Include="Orientation.cs" />
+    <Compile Include="PageCloser.cs" />
+    <Compile Include="PageNumber.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TemplateLoader.cs" />
+    <Compile Include="Table.cs" />
+    <Compile Include="Image.cs" />
+    <Compile Include="Line.cs" />
+    <Compile Include="SimplePDFDocument.cs" />
+    <Compile Include="Drawing\Area.cs" />
+    <Compile Include="Drawing\ContentTable.cs" />
+    <Compile Include="Drawing\Creator.cs" />
+    <Compile Include="Drawing\Document.cs" />
+    <Compile Include="Drawing\DocumentImage.cs" />
+    <Compile Include="Drawing\DocumentItem.cs" />
+    <Compile Include="Drawing\DocumentPage.cs" />
+    <Compile Include="Drawing\Drawable.cs" />
+    <Compile Include="Drawing\FixedItemGroup.cs" />
+    <Compile Include="Drawing\IMeasurable.cs" />
+    <Compile Include="Position.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Drawing\Spacing.cs" />
+    <Compile Include="Drawing\TextBlock.cs" />
+    <Compile Include="Drawing\TextLine.cs" />
+    <Compile Include="Drawing\UnderlinedTextLine.cs" />
+    <Compile Include="Size.cs" />
+    <Compile Include="Spacing.cs" />
+    <Compile Include="StyleDefinition.cs" />
+    <Compile Include="TableCell.cs" />
+    <Compile Include="TableRow.cs" />
+    <Compile Include="TextBlock.cs" />
+    <Compile Include="TextDecoration.cs" />
+    <Compile Include="Unit.cs" />
+    <Compile Include="UnitConverter.cs" />
+    <Compile Include="ValidationEntry.cs" />
+    <Compile Include="ValidationResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HTMLPage1.html" />
+    <Content Include="StyleTest.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GUI\AdvancedControl.resx">
+      <DependentUpon>AdvancedControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DocumentEditor.resx">
+      <DependentUpon>DocumentEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DocumentPage.resx">
+      <DependentUpon>DocumentPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ElementTree.resx">
+      <DependentUpon>ElementTree.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\PropertiesEditor.resx">
+      <DependentUpon>PropertiesEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\TextEditForm.resx">
+      <DependentUpon>TextEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
