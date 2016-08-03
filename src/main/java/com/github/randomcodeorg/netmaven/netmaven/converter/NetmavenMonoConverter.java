@@ -7,6 +7,7 @@ import com.github.randomcodeorg.netmaven.netmaven.compiler.CommandBuilder;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.CompilationException;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.ExecuteableLink;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.PathBuilder;
+import com.github.randomcodeorg.netmaven.netmaven.compiler.SimpleLogLevelSelector;
 
 public class NetmavenMonoConverter extends NetmavenConverter {
 
@@ -26,7 +27,7 @@ public class NetmavenMonoConverter extends NetmavenConverter {
 		}
 		config.getLog().info("Executing converter: mono ikvmc.exe");
 		config.getLog().debug(cb.toString());
-		ExecuteableLink execLink = new ExecuteableLink(cb.build());
+		ExecuteableLink execLink = new ExecuteableLink(new SimpleLogLevelSelector(), cb.build());
 		try {
 			if (!execLink.execute(config.getLog())) {
 				config.getLog().error("The conversion failed!");

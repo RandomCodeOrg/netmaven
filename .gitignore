@@ -1,3 +1,6 @@
+# Inner Maven Build Folder
+/src/it/TestProject/target/
+
 # OS X Files
 *.DS_Store
 

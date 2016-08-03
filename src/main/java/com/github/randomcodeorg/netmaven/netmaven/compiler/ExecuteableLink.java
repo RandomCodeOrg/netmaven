@@ -7,17 +7,22 @@ import org.apache.maven.plugin.logging.Log;
 public class ExecuteableLink {
 
 	private final String[] cmd;
+	private final LogLevelSelector logLevelSelector;
 
-	public ExecuteableLink(String... cmd) {
+	public ExecuteableLink(LogLevelSelector levelSelector, String... cmd) {
 		this.cmd = cmd;
+		this.logLevelSelector = levelSelector;
 	}
 
 	public boolean execute(Log log) throws InterruptedException, IOException {
 		ProcessBuilder pb = new ProcessBuilder(cmd);
 		Process p = pb.start();
-		new OutputRedirect(p, log, true).start();
-		new OutputRedirect(p, log, false);
-		return p.waitFor() == 0;
+		OutputRedirect r1 = new OutputRedirect(p, log, true, logLevelSelector).start();
+		OutputRedirect r2 = new OutputRedirect(p, log, false, logLevelSelector).start();
+		boolean result = p.waitFor() == 0;
+		r1.waitFor();
+		r2.waitFor();
+		return result;
 	}
 
 }

@@ -46,6 +46,9 @@ public class NetMavenGenerateSourcesMojo extends AbstractNetMavenMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		Log log = getLog();
+		if(!isExecutionRequired(log)){
+			return;
+		}
 		String ikvmHome = getIKVMLibraryPath();
 		if (ikvmHome == null) {
 			throw new MojoFailureException(
@@ -55,6 +58,16 @@ public class NetMavenGenerateSourcesMojo extends AbstractNetMavenMojo {
 		singleLibraryStrategy(log, ikvmHome);
 	}
 
+	protected boolean isExecutionRequired(Log log){
+		Set<Artifact> artifacts = mavenProject.getArtifacts();
+		for (Artifact a : artifacts) {
+			if (a.getFile().getName().endsWith(".jar")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private void singleLibraryStrategy(Log log, String ikvmHome) {
 		log.info("Using single library strategy");
 		log.info("Inspecting dependencies");

@@ -1,6 +1,6 @@
 package com.github.randomcodeorg.netmaven.netmaven.compiler;
 
-public class MonoMCSCompiler extends CompliantNetCompiler {
+class MonoMCSCompiler extends CompliantNetCompiler {
 
 	public MonoMCSCompiler(CompilationConfig config) {
 		super(config);
@@ -9,6 +9,11 @@ public class MonoMCSCompiler extends CompliantNetCompiler {
 	@Override
 	protected String getCompilerExecutable() {
 		return "mcs";
+	}
+
+	@Override
+	public void check() {
+		
 	}
 
 }

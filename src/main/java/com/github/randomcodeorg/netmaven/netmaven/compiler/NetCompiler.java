@@ -13,5 +13,7 @@ public abstract class NetCompiler {
 	protected CompilationConfig getConfig() {
 		return config;
 	}
+	
+	public abstract void check();
 
 }

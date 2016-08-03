@@ -17,8 +17,9 @@ import org.apache.maven.project.MavenProjectHelper;
 
 import com.github.randomcodeorg.netmaven.netmaven.compiler.CompilationConfig;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.CompilationOutcome;
-import com.github.randomcodeorg.netmaven.netmaven.compiler.MonoMCSCompiler;
+import com.github.randomcodeorg.netmaven.netmaven.compiler.NetCompiler;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.PathBuilder;
+import com.github.randomcodeorg.netmaven.netmaven.compiler.SelectingNetCompiler;
 
 @Mojo(name = "netmavenCompile", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE, inheritByDefault = true)
 public class NetMavenCompileMojo extends AbstractNetMavenMojo {
@@ -68,7 +69,7 @@ public class NetMavenCompileMojo extends AbstractNetMavenMojo {
 		File outputDir = new File(config.getOutputDirectory());
 		if (!outputDir.exists())
 			outputDir.mkdirs();
-		MonoMCSCompiler c = new MonoMCSCompiler(config);
+		NetCompiler c = new SelectingNetCompiler(config);
 		String filePath = c.compile();
 		mavenProject.getArtifact().setFile(new File(filePath));
 	}

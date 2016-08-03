@@ -27,26 +27,51 @@ public abstract class CompliantNetCompiler extends NetCompiler {
 			break;
 		}
 		String releaseFile = new PathBuilder(config.getOutputDirectory()).sub("Release." + extension).build();
-		cb.add(getCompilerExecutable(), "-o", releaseFile);
-		cb.add("-target:" + outcome);
+		cb.add(getCompilerExecutable());
+		addOutput(config, cb, releaseFile);
+		addOutcome(config, cb, outcome);
 		addReferences(cb, config);
+		addCompilerSpecificOptions(cb);
 		cb.add(getConfig().getSourceFiles());
-		config.getLog().info("Executing compiler: mcs");
+		config.getLog().info("Executing compiler: " + getCompilerExecutable());
 		config.getLog().debug(cb.toString());
-		ExecuteableLink execLink = new ExecuteableLink(cb.build());
+		config.getLog().info("");
+		config.getLog().info("");
+		ExecuteableLink execLink = new ExecuteableLink(getLogLevelSelector(), cb.build());
 		try {
 			if (!execLink.execute(config.getLog())) {
-				throw new CompilationException();
+				config.getLog().info("");
+				config.getLog().info("");
+				throw new CompilationException("The compilation failed. Please refer to the build output for more details.");
 			}
 
 		} catch (IOException | InterruptedException e) {
+			config.getLog().info("");
+			config.getLog().info("");
 			e.printStackTrace();
 		}
+		config.getLog().info("");
+		config.getLog().info("");
 		return releaseFile;
+	}
+	
+	protected LogLevelSelector getLogLevelSelector(){
+		return new SimpleLogLevelSelector();
 	}
 	
 	protected abstract String getCompilerExecutable();
 	
+	protected void addCompilerSpecificOptions(CommandBuilder commanBuilder){
+		
+	}
+	
+	protected void addOutcome(CompilationConfig config, CommandBuilder commanBuilder, String outcome){
+		commanBuilder.add("-target:" + outcome);
+	}
+	
+	protected void addOutput(CompilationConfig config, CommandBuilder commandBuilder, String releaseFile){
+		commandBuilder.add("-o", releaseFile);
+	}
 	
 	protected void addReferences(CommandBuilder commandBuilder, CompilationConfig config){
 		for (String lib : config.getLibs()) {

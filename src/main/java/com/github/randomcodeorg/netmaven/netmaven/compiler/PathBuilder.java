@@ -32,6 +32,8 @@ public class PathBuilder {
 		return new PathBuilder(path);
 	}
 	
-	
+	public File file(){
+		return new File(build());
+	}
 
 }

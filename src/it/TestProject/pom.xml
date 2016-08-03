@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.github.randomcodeorg.netmaven</groupId>
+	<artifactId>netmavenTestProj</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>exe</packaging>
+	<name>TestProject</name>
+	
+	<build>
+		<sourceDirectory>src/main/cs</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>com.github.randomcodeorg.netmaven</groupId>
+				<artifactId>netmaven</artifactId>
+				<version>0.0.2</version>
+				<extensions>true</extensions>
+				<configuration>
+					<assemblies>
+					</assemblies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	
+</project>

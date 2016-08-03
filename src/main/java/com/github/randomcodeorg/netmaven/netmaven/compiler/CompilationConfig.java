@@ -105,5 +105,13 @@ public class CompilationConfig {
 			}
 		}
 	}
+	
+	public String getNetVersion(){
+		return null;
+	}
 
+	public boolean hasNetVersion(){
+		return getNetVersion() != null;
+	}
+	
 }
