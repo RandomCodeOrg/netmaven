@@ -10,6 +10,7 @@
 	
 	<build>
 		<sourceDirectory>src/main/cs</sourceDirectory>
+		<testSourceDirectory>src/test/cs</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>com.github.randomcodeorg.netmaven</groupId>

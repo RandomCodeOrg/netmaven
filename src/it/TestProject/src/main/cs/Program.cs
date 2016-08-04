@@ -2,7 +2,7 @@ using System;
 using System.Net.Security;
 
 
-namespace TestProject{
+namespace RandomCodeOrg.NetMaven.TestProject{
 	class MainClass {
 	
 		public static void Main(string[] args){

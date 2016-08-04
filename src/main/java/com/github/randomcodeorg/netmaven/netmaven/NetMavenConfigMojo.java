@@ -38,7 +38,7 @@ public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 
 	@Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
 	private String outputDir;
-
+	
 	public NetMavenConfigMojo() {
 	}
 
@@ -79,8 +79,11 @@ public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 		log.debug(xmlOutput.outputString(doc));
 
 		ProjectConfig pc = new ProjectConfig(doc);
-		File generatedLibsDir = getGeneratedLibsDir();
 		Path projectHomePath = projectFile.getParentFile().toPath();
+		setupSourceDirectories(pc, projectHomePath);
+
+		File generatedLibsDir = getGeneratedLibsDir();
+
 		if (generatedLibsDir.exists()) {
 			addGeneratedLibReferences(projectHomePath, pc, generatedLibsDir);
 		}
@@ -100,6 +103,31 @@ public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 			throw new MojoExecutionException("An I/O error occured while appyling the changes.", e);
 		}
 		log.info("Completed. Refresh your project to apply the changes.");
+	}
+
+	protected void setupSourceDirectories(ProjectConfig config, Path projectHome) {
+		getLog().info("Configuring source files");
+		for (String s : mavenProject.getCompileSourceRoots()) {
+			getLog().debug("Adding source files in: " + s);
+			setupSourceDirectory(config, projectHome, new File(s));
+		}
+		for(String s : mavenProject.getTestCompileSourceRoots()){
+			getLog().debug("Adding test source files in: " + s);
+			setupSourceDirectory(config, projectHome, new File(s));
+		}
+	}
+
+	protected void setupSourceDirectory(ProjectConfig config, Path projectHome, File f) {
+		if (!f.exists())
+			return;
+		if (f.isFile()) {
+			Path filePath = f.toPath();
+			config.addSourceFile(projectHome.relativize(filePath).toString());
+		} else if (f.isDirectory()) {
+			for (File child : f.listFiles()) {
+				setupSourceDirectory(config, projectHome, child);
+			}
+		}
 	}
 
 	protected void addDependencies(Path projectHomePath, ProjectConfig pc) {

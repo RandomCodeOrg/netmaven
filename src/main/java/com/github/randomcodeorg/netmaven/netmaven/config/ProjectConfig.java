@@ -5,34 +5,77 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.project.MavenProject;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Namespace;
 
 public class ProjectConfig {
 
 	private final Document document;
 	private static final String ITEM_GROUP_TAG = "ItemGroup";
 	private static final String REFERENCE_TAG = "Reference";
+	private static final String COMPILE_TAG = "Compile";
 	private static final String HINT_PATH_TAG = "HintPath";
 	private static final String INCLUDE_ATTR = "Include";
-	//private static final String PROJECT_TAG = "Project";
+
+	private static final String CS_GUID = "FAE04EC0-301F-11D3-BF4B-00C04F79EFBC";
+
+	// private static final String PROJECT_TAG = "Project";
 	private boolean replaceSeparators = true;
 	private final Element project;
 
 	private final Map<String, Reference> newReferences = new HashMap<>();
 	private final Map<String, Reference> toEdit = new HashMap<>();
+	private final Set<String> srcFiles = new HashSet<>();
 
 	public ProjectConfig(Document doc) {
 		this.document = doc;
 		this.project = doc.getRootElement();
 	}
 
-	public Document getDocument(){
+	@Deprecated
+	public ProjectConfig(MavenProject project) {
+		this(buildDocument(project));
+	}
+
+	protected static Document buildDocument(MavenProject project) {
+
+		Element rootElement = new Element("Project");
+		rootElement.setNamespace(Namespace.getNamespace("http://schemas.microsoft.com/developer/msbuild/2003"));
+		rootElement.setAttribute("ToolsVersion", "12.0");
+		rootElement.setAttribute("DefaultTargets", "Build");
+
+		Document doc = new Document(rootElement);
+		return doc;
+	}
+
+	public Document getDocument() {
 		return document;
 	}
-	
+
 	public void setReplaceSeparators(boolean value) {
 		this.replaceSeparators = value;
+	}
+
+	protected Set<Element> getCompileItemGroups() {
+		Set<Element> itemGroups = getItemGroups();
+		Set<Element> result = new HashSet<>();
+		Element e;
+		for (Element group : itemGroups) {
+			if (isConditional(group))
+				continue;
+			for (Object childO : group.getChildren()) {
+				if (!(childO instanceof Element))
+					continue;
+				e = (Element) childO;
+				if (COMPILE_TAG.equalsIgnoreCase(e.getName())) {
+					result.add(group);
+					break;
+				}
+			}
+		}
+		return result;
 	}
 
 	protected Set<Element> getItemGroups() {
@@ -47,6 +90,10 @@ public class ProjectConfig {
 			}
 		}
 		return nodes;
+	}
+
+	public void addSourceFile(String file) {
+		srcFiles.add(file);
 	}
 
 	protected Map<Element, Set<Element>> getReferences() {
@@ -192,6 +239,25 @@ public class ProjectConfig {
 			itemGroup.addContent(refElement);
 		}
 		newReferences.clear();
+		if (!srcFiles.isEmpty()) {
+			Element compileGroup = null;
+			Element compileElement;
+			Set<Element> cGroups = getCompileItemGroups();
+			if (!cGroups.isEmpty())
+				compileGroup = cGroups.iterator().next();
+			if (compileGroup == null) {
+				compileGroup = new Element(ITEM_GROUP_TAG, project.getNamespace());
+				project.addContent(compileGroup);
+			}
+			compileGroup.removeContent();
+			for (String srcFile : srcFiles) {
+				compileElement = new Element(COMPILE_TAG, project.getNamespace());
+				if (replaceSeparators && srcFile != null)
+					srcFile = srcFile.replace("/", "\\");
+				compileElement.setAttribute(INCLUDE_ATTR, srcFile);
+				compileGroup.addContent(compileElement);
+			}
+		}
 	}
 
 }
