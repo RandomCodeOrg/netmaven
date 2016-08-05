@@ -40,6 +40,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Iesi.Collections-4.0.1.4000">
+      <HintPath>..\..\..\..\..\.m2\repository\Iesi\Collections\Iesi.Collections\4.0.1.4000\Iesi.Collections-4.0.1.4000.dll</HintPath>
+    </Reference>
+    <Reference Include="net40-NHibernate-4.0.4.4000">
+      <HintPath>..\..\..\..\..\.m2\repository\NHibernate\net40-NHibernate\4.0.4.4000\net40-NHibernate-4.0.4.4000.dll</HintPath>
+    </Reference>
+    <Reference Include="net45-nunit.framework-3.4.1">
+      <HintPath>..\..\..\..\..\.m2\repository\NUnit\net45-nunit.framework\3.4.1\net45-nunit.framework-3.4.1.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\test\cs\Test.cs" />

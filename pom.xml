@@ -41,6 +41,7 @@
 					<settingsFile>src/it/TestProject/settings.xml</settingsFile>
 					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
 					<streamLogs>true</streamLogs>
+					<!--<debug>true</debug>-->
 				</configuration>
 				<executions>
 					<execution>
@@ -73,6 +74,11 @@
 			<version>3.3.9</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-model-builder</artifactId>
+			<version>3.3.9</version>
+		</dependency>
+		<dependency>
 			<groupId>org.sonatype.aether</groupId>
 			<artifactId>aether-api</artifactId>
 			<version>1.8</version>
@@ -88,11 +94,22 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.7</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

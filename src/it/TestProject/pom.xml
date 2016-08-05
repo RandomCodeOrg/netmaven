@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>com.github.randomcodeorg.netmaven</groupId>
 	<artifactId>netmavenTestProj</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>exe</packaging>
 	<name>TestProject</name>
-	
+
 	<build>
 		<sourceDirectory>src/main/cs</sourceDirectory>
 		<testSourceDirectory>src/test/cs</testSourceDirectory>
@@ -25,6 +25,28 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	
+
+	 <repositories>
+		<repository>
+			<id>nuget-repo</id>
+			<url>https://www.nuget.org/api/v2</url>
+			<layout>nuget</layout>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>NHibernate</groupId>
+			<artifactId>net40-NHibernate</artifactId>
+			<version>4.0.4.4000</version>
+			<type>dll</type>
+		</dependency>
+		<dependency>
+			<groupId>NUnit</groupId>
+			<artifactId>net45-nunit.framework</artifactId> 
+			<version>3.4.1</version>
+			<type>dll</type>
+		</dependency>
+	</dependencies> 
+
 </project>

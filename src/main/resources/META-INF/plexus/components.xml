@@ -40,7 +40,6 @@
 				<packaging>exe</packaging>
 			</configuration>
 		</component>
-		
 		<component>
 			<role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
 			<role-hint>dll</role-hint>
@@ -80,6 +79,11 @@
 				<!--the packaging used when declaring an implementation of the packaging -->
 				<packaging>dll</packaging>
 			</configuration>
+		</component>
+		<component>
+			<role>org.eclipse.aether.spi.connector.RepositoryConnectorFactory</role>
+			<implementation>com.github.randomcodeorg.netmaven.netmaven.nuget.NugetRepositoryConnectorFactory</implementation>
+			<role-hint>nuget</role-hint>
 		</component>
 	</components>
 </component-set>
