@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0" DefaultTargets="Build">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="Build">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -40,13 +40,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Iesi.Collections-4.0.1.4000">
+    <Reference Include="Iesi.Collections">
       <HintPath>..\..\..\..\..\.m2\repository\Iesi\Collections\Iesi.Collections\4.0.1.4000\Iesi.Collections-4.0.1.4000.dll</HintPath>
     </Reference>
-    <Reference Include="net40-NHibernate-4.0.4.4000">
+    <Reference Include="NHibernate">
       <HintPath>..\..\..\..\..\.m2\repository\NHibernate\net40-NHibernate\4.0.4.4000\net40-NHibernate-4.0.4.4000.dll</HintPath>
     </Reference>
-    <Reference Include="net45-nunit.framework-3.4.1">
+    <Reference Include="nunit.framework">
       <HintPath>..\..\..\..\..\.m2\repository\NUnit\net45-nunit.framework\3.4.1\net45-nunit.framework-3.4.1.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -66,4 +66,3 @@
   </Target>
   -->
 </Project>
-

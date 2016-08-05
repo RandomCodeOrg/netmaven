@@ -41,7 +41,7 @@
 					<settingsFile>src/it/TestProject/settings.xml</settingsFile>
 					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
 					<streamLogs>true</streamLogs>
-					<!--<debug>true</debug>-->
+					<debug>true</debug>
 				</configuration>
 				<executions>
 					<execution>
