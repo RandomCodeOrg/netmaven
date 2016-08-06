@@ -21,6 +21,7 @@
 					<assemblies>
 						<assembly>System.Security</assembly>
 						<assembly>System.Dynamic</assembly>
+						<assembly>System.Core</assembly>
 					</assemblies>
 					<targetFramework>4.0</targetFramework>
 				</configuration>
@@ -37,12 +38,6 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>NHibernate</groupId>
-			<artifactId>net40-NHibernate</artifactId>
-			<version>4.0.4.4000</version>
-			<type>dll</type>
-		</dependency>
 		<dependency>
 			<groupId>NUnit</groupId>
 			<artifactId>net40-nunit.framework</artifactId> 
