@@ -32,30 +32,7 @@ class VisualCSCompiler extends CompliantNetCompiler {
 			throwNotFound();
 		return tmp;
 	}
-	
-	@Override
-	protected LogLevelSelector getLogLevelSelector() {
-		String warningRegex = ".*: warning CS[0-9]+: .*";
-		String errorRegex = ".*: error CS[0-9]+: .*";
-		return new RegexLogLevelSelector(errorRegex, warningRegex);
-	}
-	
-	@Override
-	protected void addCompilerSpecificOptions(CommandBuilder commanBuilder) {
-		commanBuilder.add("/nologo");
-	}
-	
-	@Override
-	protected void addOutcome(CompilationConfig config, CommandBuilder commanBuilder, String outcome) {
-		commanBuilder.add("/target:" + outcome);
-	}
 
-	@Override
-	protected void addOutput(CompilationConfig config, CommandBuilder commandBuilder, String releaseFile) {
-		if(releaseFile.contains(" ") && !releaseFile.startsWith("\"")) releaseFile = String.format("\"%s\"", releaseFile);
-		commandBuilder.add( String.format("/out:%s", releaseFile) );
-	}
-	
 	protected File searchAt(CompilationConfig config, File f) {
 		if (!f.exists() || !f.isDirectory())
 			return null;
@@ -73,14 +50,48 @@ class VisualCSCompiler extends CompliantNetCompiler {
 	}
 
 	protected boolean check(CompilationConfig config, File currentV, File newV) {
-		if (config.hasNetVersion()) {
-			Pattern pattern = Pattern.compile(config.getNetVersion());
+		if (config.hasTargetFramework()) {
+			Pattern pattern = Pattern.compile(config.getTargetFramework());
 			return pattern.matcher(newV.getName()).matches();
 		} else {
 			if (currentV == null)
 				return true;
 			return newV.getName().compareTo(currentV.getName()) > 0;
 		}
+	}
+
+	@Override
+	public String[] getFrameworkVersions() {
+		throw new RuntimeException("Not yet implemented!");
+	}
+
+	@Override
+	protected LogLevelSelector getLogLevelSelector() {
+		String warningRegex = ".*: warning CS[0-9]+: .*";
+		String errorRegex = ".*: error CS[0-9]+: .*";
+		return new RegexLogLevelSelector(errorRegex, warningRegex);
+	}
+
+	@Override
+	protected void addCompilerSpecificOptions(CommandBuilder commanBuilder) {
+		commanBuilder.add("/nologo");
+	}
+
+	@Override
+	protected void addOutcome(CompilationConfig config, CommandBuilder commanBuilder, String outcome) {
+		commanBuilder.add("/target:" + outcome);
+	}
+
+	@Override
+	protected void addOutput(CompilationConfig config, CommandBuilder commandBuilder, String releaseFile) {
+		if (releaseFile.contains(" ") && !releaseFile.startsWith("\""))
+			releaseFile = String.format("\"%s\"", releaseFile);
+		commandBuilder.add(String.format("/out:%s", releaseFile));
+	}
+
+	@Override
+	protected File getLibraryPathForFramework(String version) {
+		return null;
 	}
 
 	protected void throwNotFound() {

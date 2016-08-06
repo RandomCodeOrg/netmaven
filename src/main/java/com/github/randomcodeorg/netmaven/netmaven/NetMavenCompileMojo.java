@@ -42,7 +42,7 @@ public class NetMavenCompileMojo extends AbstractNetMavenMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		getLog().info("Executing NatMaven-Compiler");
 		getLog().info("Location is: " + projectBuildDir);
-
+		
 		String packaging = mavenProject.getPackaging();
 		CompilationOutcome outcome = CompilationOutcome.DLL;
 		if ("exe".equals(packaging))
@@ -61,7 +61,7 @@ public class NetMavenCompileMojo extends AbstractNetMavenMojo {
 		CompilationConfig config = new CompilationConfig(getLog(), projectBuildDir,
 				new PathBuilder(outputDir).sub("bin").build(), getAssemblies(), getLibDirectory(), outcome,
 				dependencies);
-
+		config.setTargetFramework(getTargetFramework());
 		if (config.findSourceFiles().size() == 0) {
 			getLog().info("No source files found!");
 			return;
@@ -70,6 +70,10 @@ public class NetMavenCompileMojo extends AbstractNetMavenMojo {
 		if (!outputDir.exists())
 			outputDir.mkdirs();
 		NetCompiler c = new SelectingNetCompiler(config);
+		getLog().debug("Available framework versions:");
+		for(String framework : c.getFrameworkVersions()){
+			getLog().debug("\t" + framework);
+		}
 		String filePath = c.compile();
 		mavenProject.getArtifact().setFile(new File(filePath));
 	}

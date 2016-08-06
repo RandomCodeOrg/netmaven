@@ -21,6 +21,7 @@
 					<assemblies>
 						<assembly>System.Security</assembly>
 					</assemblies>
+					<targetFramework>4.5</targetFramework>
 				</configuration>
 			</plugin>
 		</plugins>

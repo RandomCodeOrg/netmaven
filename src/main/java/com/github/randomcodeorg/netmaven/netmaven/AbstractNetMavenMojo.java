@@ -17,6 +17,9 @@ public abstract class AbstractNetMavenMojo extends AbstractMojo {
 
 	@Parameter(name = "ikvmHome", required = false)
 	private String ikvmLocation;
+	
+	@Parameter(name = "targetFramework", required=false)
+	private String targetFramework;
 
 	@Parameter(defaultValue = "${repositorySystemSession}", required = true, readonly = true)
 	private RepositorySystemSession repoSession;
@@ -76,4 +79,8 @@ public abstract class AbstractNetMavenMojo extends AbstractMojo {
 		return f.exists() && f.isDirectory();
 	}
 
+	protected String getTargetFramework(){
+		return targetFramework;
+	}
+	
 }

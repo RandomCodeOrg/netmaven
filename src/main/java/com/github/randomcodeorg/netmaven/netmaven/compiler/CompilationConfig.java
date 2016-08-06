@@ -17,6 +17,7 @@ public class CompilationConfig {
 	private List<String> libs;
 	private final CompilationOutcome outcome;
 	private final List<File> dependencies;
+	private String targetFramework;
 
 	public CompilationConfig(Log log, String sourceLocation, String outputDirectory, List<String> frameworkAssemblies,
 			String libLocation, CompilationOutcome outcome, List<File> dependencies) {
@@ -106,12 +107,17 @@ public class CompilationConfig {
 		}
 	}
 	
-	public String getNetVersion(){
-		return null;
+	
+	public String getTargetFramework(){
+		return targetFramework;
 	}
 
-	public boolean hasNetVersion(){
-		return getNetVersion() != null;
+	public void setTargetFramework(String targetFramework){
+		this.targetFramework = targetFramework;
+	}
+	
+	public boolean hasTargetFramework(){
+		return targetFramework != null;
 	}
 	
 }

@@ -37,4 +37,9 @@ public class SelectingNetCompiler extends NetCompiler {
 		selectedCompiler.check();
 	}
 
+	@Override
+	public String[] getFrameworkVersions() {
+		return selectedCompiler.getFrameworkVersions();
+	}
+	
 }

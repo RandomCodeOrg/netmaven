@@ -16,4 +16,6 @@ public abstract class NetCompiler {
 	
 	public abstract void check();
 
+	public abstract String[] getFrameworkVersions();
+	
 }
