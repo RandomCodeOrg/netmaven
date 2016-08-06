@@ -20,6 +20,7 @@
 				<configuration>
 					<assemblies>
 						<assembly>System.Security</assembly>
+						<assembly>System.Dynamic</assembly>
 					</assemblies>
 					<targetFramework>4.0</targetFramework>
 				</configuration>
