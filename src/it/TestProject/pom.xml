@@ -44,7 +44,7 @@
 		</dependency>
 		<dependency>
 			<groupId>NUnit</groupId>
-			<artifactId>net45-nunit.framework</artifactId> 
+			<artifactId>net40-nunit.framework</artifactId> 
 			<version>3.4.1</version>
 			<type>dll</type>
 		</dependency>

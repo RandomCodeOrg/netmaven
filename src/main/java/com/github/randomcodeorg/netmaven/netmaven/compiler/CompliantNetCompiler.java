@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.maven.plugin.logging.Log;
-
 public abstract class CompliantNetCompiler extends NetCompiler {
 
 	public CompliantNetCompiler(CompilationConfig config) {
@@ -17,7 +15,7 @@ public abstract class CompliantNetCompiler extends NetCompiler {
 	public String compile() {
 		CommandBuilder cb = new CommandBuilder();
 		CompilationConfig config = getConfig();
-		
+
 		String outcome = "exe";
 		String extension = "exe";
 		switch (config.getOutcome()) {
