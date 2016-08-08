@@ -24,6 +24,8 @@
 						<assembly>System.Core</assembly>
 					</assemblies>
 					<targetFramework>4.0</targetFramework>
+					<showDebugOutput>true</showDebugOutput>
+					<showCompilerVersion>true</showCompilerVersion>
 				</configuration>
 			</plugin>
 		</plugins>

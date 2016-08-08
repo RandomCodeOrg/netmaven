@@ -35,6 +35,12 @@ public class NetMavenCompileMojo extends AbstractNetMavenMojo {
 
 	@Parameter(required = true, property = "project", readonly = true)
 	private MavenProject mavenProject;
+	
+	@Parameter(name="showDebugOutput", required=false)
+	private boolean showDebugOutput = false;
+	
+	@Parameter(name="showCompilerVersion", required = false)
+	private boolean showCompilerVersion = false;
 
 	public NetMavenCompileMojo() {
 	}
@@ -61,6 +67,8 @@ public class NetMavenCompileMojo extends AbstractNetMavenMojo {
 		CompilationConfig config = new CompilationConfig(getLog(), projectBuildDir,
 				new PathBuilder(outputDir).sub("bin").build(), getAssemblies(), getLibDirectory(), outcome,
 				dependencies);
+		config.setShowCompilerVersion(showCompilerVersion);
+		config.setShowDebugOutput(showDebugOutput);
 		config.setTargetFramework(getTargetFramework());
 		if (config.findSourceFiles().size() == 0) {
 			getLog().info("No source files found!");

@@ -35,6 +35,8 @@ public abstract class CompliantNetCompiler extends NetCompiler {
 		buildReferences(cb, config);
 		buildLibraryPaths(cb, config);
 		addCompilerSpecificOptions(cb);
+		if(config.getShowDebugOutput()) addDebugOutput(config, cb);
+		if(config.getShowCompilerVersion()) addShowCompilerVersion(config, cb);
 		cb.add(getConfig().getSourceFiles());
 		config.getLog().info("Executing compiler: " + getCompilerExecutable());
 		config.getLog().debug(cb.toString());
@@ -67,6 +69,14 @@ public abstract class CompliantNetCompiler extends NetCompiler {
 
 	protected void addCompilerSpecificOptions(CommandBuilder commanBuilder) {
 
+	}
+	
+	protected void addShowCompilerVersion(CompilationConfig config, CommandBuilder commandBuilder){
+		commandBuilder.add("--version");
+	}
+	
+	protected void addDebugOutput(CompilationConfig config, CommandBuilder commandBuilder){
+		commandBuilder.add("-v");
 	}
 
 	protected void addOutcome(CompilationConfig config, CommandBuilder commanBuilder, String outcome) {

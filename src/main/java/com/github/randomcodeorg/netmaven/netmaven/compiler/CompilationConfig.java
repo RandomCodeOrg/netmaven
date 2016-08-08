@@ -18,6 +18,8 @@ public class CompilationConfig {
 	private final CompilationOutcome outcome;
 	private final List<File> dependencies;
 	private String targetFramework;
+	private boolean showDebugOutput = false;
+	private boolean showCompilerVersion = false;
 
 	public CompilationConfig(Log log, String sourceLocation, String outputDirectory, List<String> frameworkAssemblies,
 			String libLocation, CompilationOutcome outcome, List<File> dependencies) {
@@ -32,6 +34,22 @@ public class CompilationConfig {
 
 	public CompilationOutcome getOutcome() {
 		return outcome;
+	}
+	
+	public boolean getShowDebugOutput(){
+		return showDebugOutput;
+	}
+	
+	public void setShowDebugOutput(boolean value){
+		showDebugOutput = value;
+	}
+	
+	public boolean getShowCompilerVersion(){
+		return showCompilerVersion;
+	}
+	
+	public void setShowCompilerVersion(boolean value){
+		showCompilerVersion = value;
 	}
 
 	private List<File> findSourceFiles(List<File> files, File current) {
