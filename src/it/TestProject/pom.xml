@@ -44,6 +44,7 @@
 			<artifactId>net40-nunit.framework</artifactId> 
 			<version>3.4.1</version>
 			<type>dll</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies> 
 

@@ -28,13 +28,14 @@ public abstract class CompliantNetCompiler extends NetCompiler {
 			extension = "exe";
 			break;
 		}
-		String releaseFile = new PathBuilder(config.getOutputDirectory()).sub("Release." + extension).build();
+		String releaseFile = new PathBuilder(config.getOutputDirectory()).sub(config.getArtifactName() + "." + extension).build();
 		cb.add(getCompilerExecutable());
 		addOutput(config, cb, releaseFile);
 		addOutcome(config, cb, outcome);
 		buildReferences(cb, config);
 		buildLibraryPaths(cb, config);
 		addCompilerSpecificOptions(cb);
+		if(config.getCompileDebugVersion()) addCompileDebugOptions(cb);
 		if(config.getShowDebugOutput()) addDebugOutput(config, cb);
 		if(config.getShowCompilerVersion()) addShowCompilerVersion(config, cb);
 		cb.add(getConfig().getSourceFiles());
@@ -66,8 +67,13 @@ public abstract class CompliantNetCompiler extends NetCompiler {
 	}
 
 	protected abstract String getCompilerExecutable();
+	
+	protected void addCompileDebugOptions(CommandBuilder commandBuilder){
+		commandBuilder.add("/debug");
+		
+	}
 
-	protected void addCompilerSpecificOptions(CommandBuilder commanBuilder) {
+	protected void addCompilerSpecificOptions(CommandBuilder commandBuilder) {
 
 	}
 	

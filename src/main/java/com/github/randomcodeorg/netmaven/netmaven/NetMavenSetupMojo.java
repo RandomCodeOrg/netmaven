@@ -64,10 +64,10 @@ public class NetMavenSetupMojo extends AbstractNetMavenMojo {
 						+ String.format(
 								"Please refer to the license file at '%s' to get more information about the terms and conditions",
 								PathBuilder.create(path).sub("LICENSE").build())
-						+ " regarding the IKVM library and its dependencies."+
-								" The transformations which are applied by IKVM, might be a forbidden manipulation of third party property."
-				+ " Please check the license descriptions of all (Java) dependencies that will or might be transformed by IKVM.\n\n" +
-		"DO NOT USE IKVM OR ANY JAVA DEPENDENCY IF YOU DON'T AGREE WITH THE REFERED LICENSES OR RESTRICTIONS.");
+						+ " regarding the IKVM library and its dependencies."
+						+ " The transformations which are applied by IKVM, might be a forbidden manipulation of third party property."
+						+ " Please check the license descriptions of all (Java) dependencies that will or might be transformed by IKVM.\n\n"
+						+ "DO NOT USE IKVM OR ANY JAVA DEPENDENCY IF YOU DON'T AGREE WITH THE REFERED LICENSES OR RESTRICTIONS.");
 	}
 
 	protected void extractIKVM(Log log, File tmpFile, File targetDir) throws MojoExecutionException {

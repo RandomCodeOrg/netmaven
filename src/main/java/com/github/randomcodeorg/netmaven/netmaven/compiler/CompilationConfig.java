@@ -15,13 +15,16 @@ public class CompilationConfig {
 	private List<String> frameworkAssemblies;
 	private final String libLocation;
 	private List<String> libs;
-	private final CompilationOutcome outcome;
+	private CompilationOutcome outcome;
 	private final List<File> dependencies;
 	private String targetFramework;
 	private boolean showDebugOutput = false;
 	private boolean showCompilerVersion = false;
+	private boolean compileDebugVersion = false;
+	
+	private String artifactName;
 
-	public CompilationConfig(Log log, String sourceLocation, String outputDirectory, List<String> frameworkAssemblies,
+	public CompilationConfig(String artifactName, Log log, String sourceLocation, String outputDirectory, List<String> frameworkAssemblies,
 			String libLocation, CompilationOutcome outcome, List<File> dependencies) {
 		this.log = log;
 		this.sourceLocation = sourceLocation;
@@ -30,10 +33,31 @@ public class CompilationConfig {
 		this.libLocation = libLocation;
 		this.outcome = outcome;
 		this.dependencies = dependencies;
+		this.artifactName = artifactName;
 	}
 
+	public boolean getCompileDebugVersion(){
+		return compileDebugVersion;
+	}
+	
+	public void setCompileDebugVersion(boolean value){
+		compileDebugVersion = value;
+	}
+	
+	public String getArtifactName(){
+		return artifactName;
+	}
+	
+	public void setArtifactName(String name){
+		this.artifactName = name;
+	}
+	
 	public CompilationOutcome getOutcome() {
 		return outcome;
+	}
+	
+	public void setOutcome(CompilationOutcome outcome){
+		this.outcome = outcome;
 	}
 	
 	public boolean getShowDebugOutput(){

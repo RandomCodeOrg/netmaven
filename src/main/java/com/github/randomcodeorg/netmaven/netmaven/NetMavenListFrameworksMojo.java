@@ -23,7 +23,7 @@ public class NetMavenListFrameworksMojo extends AbstractNetMavenMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		Log log = getLog();
-		CompilationConfig cc = new CompilationConfig(getLog(), "/", "/", new ArrayList<String>(), "/",
+		CompilationConfig cc = new CompilationConfig("Release", getLog(), "/", "/", new ArrayList<String>(), "/",
 				CompilationOutcome.DLL, new ArrayList<File>());
 		SelectingNetCompiler compiler = new SelectingNetCompiler(cc);
 		String[] frameworks = compiler.getFrameworkVersions();
