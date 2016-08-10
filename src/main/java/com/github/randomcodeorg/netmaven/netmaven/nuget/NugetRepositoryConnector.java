@@ -159,6 +159,9 @@ public class NugetRepositoryConnector implements RepositoryConnector {
 			HttpEntity entity = response.getEntity();
 			if (response.getStatusLine().getStatusCode() != 200) {
 				download.setException(new ArtifactNotFoundException(a, repo));
+				logger.warn(String.format(
+						"Could not fetch the nuget artifact '%s' because the server returned an unexpected result code: %d - %s",
+						a, response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase()));
 				EntityUtils.consume(entity);
 				return;
 			}
@@ -178,12 +181,15 @@ public class NugetRepositoryConnector implements RepositoryConnector {
 					Collection<NugetArtifact> alternatives = expander.findAlternatives(download);
 					if (!alternatives.isEmpty()) {
 						logger.error("");
-						logger.error(String.format("The nuget dependency '%s' could not be located. Did you mean one of the following dependencies?", a.toString()));
-						for(NugetArtifact alt : alternatives){
+						logger.error(String.format(
+								"The nuget dependency '%s' could not be located. Did you mean one of the following dependencies?",
+								a.toString()));
+						for (NugetArtifact alt : alternatives) {
 							logger.error(String.format("\t%s", alt.toShortString()));
 						}
 						logger.error("");
-						download.setException(new ArtifactNotFoundException(a, repo, "Could not find the dependency for the given artifactId. Please refer to the build output to get details about available alternatives."));
+						download.setException(new ArtifactNotFoundException(a, repo,
+								"Could not find the dependency for the given artifactId. Please refer to the build output to get details about available alternatives."));
 					} else {
 						download.setException(new ArtifactNotFoundException(a, repo));
 					}
@@ -202,15 +208,16 @@ public class NugetRepositoryConnector implements RepositoryConnector {
 		}
 	}
 
-	private void assertExists(File f) throws IOException{
-		if(f.exists()) return;
+	private void assertExists(File f) throws IOException {
+		if (f.exists())
+			return;
 		File parent = f.getParentFile();
-		if(!parent.exists()) {
+		if (!parent.exists()) {
 			parent.mkdirs();
 		}
 		f.createNewFile();
 	}
-	
+
 	private String buildMetaUrl(MetadataDownload download) throws UnsupportedEncodingException {
 		String url = repoUrl;
 		if (!repoUrl.endsWith("/"))

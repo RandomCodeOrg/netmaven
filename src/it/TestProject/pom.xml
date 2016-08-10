@@ -46,6 +46,14 @@
 			<type>dll</type>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>NUnit.Core.Engine</groupId>
+			<artifactId>net35-nunit.core.engine</artifactId>
+			<version>3.0.0-beta-4</version>
+			<type>dll</type>
+		</dependency>
+		
 	</dependencies> 
 
 </project>

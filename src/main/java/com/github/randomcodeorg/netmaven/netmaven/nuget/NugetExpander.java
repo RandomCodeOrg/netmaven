@@ -32,7 +32,7 @@ import org.jdom.output.XMLOutputter;
 
 public class NugetExpander {
 
-	private final Pattern executablePattern = Pattern.compile("lib/net[0-9]+/[^/]+\\.(dll|exe)$");
+	private final Pattern executablePattern = Pattern.compile("lib(/net[0-9]+)?/[^/]+\\.(dll|exe)$"); // Pattern.compile("lib/net[0-9]+/[^/]+\\.(dll|exe)$");
 	private final Pattern frameworkPattern = Pattern.compile("^(net[0-9]+\\-)([A-Za-z0-9_\\-.]+)$");
 	private final Pattern nuspecPattern = Pattern.compile("[^/]+\\.nuspec$");
 	private final Map<NugetArtifact, File> executableArtifacts = new HashMap<>();
