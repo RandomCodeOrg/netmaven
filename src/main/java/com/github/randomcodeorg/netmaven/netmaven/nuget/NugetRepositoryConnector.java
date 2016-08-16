@@ -41,6 +41,7 @@ import org.eclipse.aether.transfer.MetadataTransferException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+@Deprecated
 public class NugetRepositoryConnector implements RepositoryConnector {
 
 	private static final String FORMAT = "package/%s/%s";

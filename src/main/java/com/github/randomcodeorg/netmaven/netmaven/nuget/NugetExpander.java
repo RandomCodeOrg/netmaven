@@ -30,9 +30,10 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+@Deprecated
 public class NugetExpander {
 
-	private final Pattern executablePattern = Pattern.compile("lib(/net[0-9]+)?/[^/]+\\.(dll|exe)$"); // Pattern.compile("lib/net[0-9]+/[^/]+\\.(dll|exe)$");
+	private final Pattern executablePattern = Pattern.compile("(lib|tools)(/net[0-9]+)?/[^/]+\\.(dll|exe)$"); // Pattern.compile("lib/net[0-9]+/[^/]+\\.(dll|exe)$");
 	private final Pattern frameworkPattern = Pattern.compile("^(net[0-9]+\\-)([A-Za-z0-9_\\-.]+)$");
 	private final Pattern nuspecPattern = Pattern.compile("[^/]+\\.nuspec$");
 	private final Map<NugetArtifact, File> executableArtifacts = new HashMap<>();
@@ -70,8 +71,32 @@ public class NugetExpander {
 					"Could not find the required NuGet specifications (*.nuspec) within the package."));
 			return;
 		}
-		NugetArtifact artifact;
+
 		NuspecInformation nuspecInfo = new NuspecInformation(doc);
+		if (executables.isEmpty()) {
+			buildDependencyWithoutDlls(nuspecInfo, download.getArtifact());
+		} else {
+			buildDependencyWithDlls(executables, download, zipFile, nuspecInfo);
+		}
+		zipFile.close();
+	}
+
+	private void buildDependencyWithoutDlls(NuspecInformation nuspecInfo, Artifact art) throws IOException {
+		NugetArtifact artifact = buildArtifact(art);
+		logger.debug(String.format("Build dependeny without DLL files for artiact '%s'", artifact));
+		Model model = new Model();
+		model.setModelVersion("4.0.0");
+		model.setGroupId(artifact.getGroupId());
+		model.setArtifactId(artifact.getArtifactId());
+		model.setVersion(artifact.getVersion());
+		nuspecInfo.apply(model, logger);
+		model.setPackaging("pom");
+		pomArtifacts.put(artifact, writeTemp(model));
+	}
+
+	private void buildDependencyWithDlls(Set<ZipEntry> executables, ArtifactDownload download, ZipFile zipFile,
+			NuspecInformation nuspecInfo) throws IOException {
+		NugetArtifact artifact;
 		for (ZipEntry e : executables) {
 			artifact = buildArtifact(download.getArtifact().getGroupId(), download.getArtifact().getVersion(), e);
 			executableArtifacts.put(artifact, writeTemp(zipFile, e));
@@ -92,29 +117,21 @@ public class NugetExpander {
 			logger.debug(String.format("Temporary pom for artifact '%s' is: %s", artifact,
 					pomArtifacts.get(artifact).getAbsolutePath()));
 		}
-		zipFile.close();
 	}
 
-	public Collection<NugetArtifact> findAlternatives(ArtifactDownload download){
+	public Collection<NugetArtifact> findAlternatives(ArtifactDownload download) {
 		Map<String, NugetArtifact> result = new HashMap<>();
-		for(NugetArtifact a : executableArtifacts.keySet()){
-			if(a.getGroupId().equals(download.getArtifact().getGroupId()) && a.getVersion().equals(download.getArtifact().getVersion()))
-				if(!result.containsKey(a.toShortString())) result.put(a.toShortString(), a);
+		for (NugetArtifact a : executableArtifacts.keySet()) {
+			if (a.getGroupId().equals(download.getArtifact().getGroupId())
+					&& a.getVersion().equals(download.getArtifact().getVersion()))
+				if (!result.containsKey(a.toShortString()))
+					result.put(a.toShortString(), a);
 		}
 		return result.values();
 	}
-	
-	public File getFile(ArtifactDownload download, boolean useStrictMode) {
-		NugetArtifact nugetArt;
-		Artifact a = download.getArtifact();
-		if (frameworkPattern.matcher(a.getArtifactId()).matches()) {
-			String[] args = a.getArtifactId().split("\\-");
-			nugetArt = new NugetArtifact(a.getGroupId(), args[1], a.getVersion(), args[0]);
-		} else {
-			nugetArt = new NugetArtifact(download.getArtifact().getGroupId(), download.getArtifact().getArtifactId(),
-					download.getArtifact().getVersion(), null);
-		}
 
+	public File getFile(ArtifactDownload download, boolean useStrictMode) {
+		NugetArtifact nugetArt = buildArtifact(download.getArtifact());
 		if (download.getFile().getName().endsWith(".pom")) {
 			logger.debug(String.format("Requesting temporary pom.xml for: %s (%s)", nugetArt,
 					download.getFile().getAbsolutePath()));
@@ -175,14 +192,30 @@ public class NugetExpander {
 
 	private NugetArtifact buildArtifact(String groupId, String version, ZipEntry entry) {
 		String name = entry.getName();
-		String artifactId = name.substring(name.lastIndexOf("lib/") + 4, name.lastIndexOf("."));
+		String artifactId;
+		if(name.contains("lib/")){
+			artifactId = name.substring(name.lastIndexOf("lib/") + 4, name.lastIndexOf("."));
+		}else if(name.contains("tools/")){
+			artifactId = name.substring(name.lastIndexOf("tools/") + 6, name.lastIndexOf("."));
+		}else{
+			artifactId = name;
+		}
 		if (artifactId.contains("/")) {
 			String[] args = artifactId.split("/");
 			return new NugetArtifact(groupId, args[1], version, args[0]);
 		} else {
 			return new NugetArtifact(groupId, artifactId, version, null);
 		}
+	}
 
+	private NugetArtifact buildArtifact(Artifact artifact) {
+		String artifactId = artifact.getArtifactId();
+		if (frameworkPattern.matcher(artifactId).matches()) {
+			String[] args = artifactId.split("-");
+			return new NugetArtifact(artifact.getGroupId(), args[1], artifact.getVersion(), args[0]);
+		} else {
+			return new NugetArtifact(artifact.getGroupId(), artifactId, artifact.getVersion(), null);
+		}
 	}
 
 	private File writeTemp(ZipFile zip, ZipEntry entry) throws IOException {

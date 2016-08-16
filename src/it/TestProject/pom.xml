@@ -43,15 +43,20 @@
 			<groupId>NUnit</groupId>
 			<artifactId>net40-nunit.framework</artifactId> 
 			<version>3.4.1</version>
-			<type>dll</type>
+			<type>nuget</type>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>NUnit.Core.Engine</groupId>
 			<artifactId>net35-nunit.core.engine</artifactId>
 			<version>3.0.0-beta-4</version>
-			<type>dll</type>
+			<type>nuget</type>
+		</dependency>
+		<dependency>
+			<groupId>NUnit.Console</groupId>
+			<artifactId>net35-nunit.console</artifactId>
+			<version>3.4.1</version>
+			<type>nuget</type>
 		</dependency>
 		
 	</dependencies> 

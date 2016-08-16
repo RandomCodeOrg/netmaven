@@ -12,6 +12,8 @@ import org.eclipse.aether.spi.locator.Service;
 import org.eclipse.aether.spi.locator.ServiceLocator;
 import org.eclipse.aether.transfer.NoRepositoryConnectorException;
 
+import com.github.randomcodeorg.netmaven.netmaven.PlexusRedirectLogger;
+
 @Component(role = RepositoryConnectorFactory.class, hint = "nuget")
 public class NugetRepositoryConnectorFactory implements RepositoryConnectorFactory, Service {
 
@@ -32,7 +34,7 @@ public class NugetRepositoryConnectorFactory implements RepositoryConnectorFacto
 	public RepositoryConnector newInstance(RepositorySystemSession session, RemoteRepository repository)
 			throws NoRepositoryConnectorException {
 		if("nuget".equalsIgnoreCase(repository.getContentType())){
-			return new NugetRepositoryConnector(repository, logger);
+			return new NugetRepositoryConnector2(repository, PlexusRedirectLogger.named(logger, "NugetConnector"));
 		}
 		return provider.newRepositoryConnector(session, repository);
 	}

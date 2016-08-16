@@ -1,10 +1,12 @@
 package com.github.randomcodeorg.netmaven.netmaven;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.aether.RepositorySystemSession;
 
@@ -24,8 +26,30 @@ public abstract class AbstractNetMavenMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${repositorySystemSession}", required = true, readonly = true)
 	private RepositorySystemSession repoSession;
 
+	private InternalLogger logger;
+	
+	private FrameworkVersion targetFrameworkVersion;
+	
 	public AbstractNetMavenMojo() {
 
+	}
+	
+	protected InternalLogger getLogger(){
+		if(logger == null){
+			logger = new MavenRedirectLogger(getLog());
+		}
+		return logger;
+	}
+
+	protected FrameworkVersion getTargetFrameworkVersion() throws MojoExecutionException{
+		if(targetFrameworkVersion == null){
+			try {
+				targetFrameworkVersion = FrameworkVersion.parse(targetFramework);
+			} catch (ParseException e) {
+				throw new MojoExecutionException("The specified target framework version is invalid.", e);
+			}
+		}
+		return targetFrameworkVersion;
 	}
 
 	protected List<String> getAssemblies() {
