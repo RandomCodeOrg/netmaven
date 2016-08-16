@@ -24,7 +24,7 @@ public class Reference {
 			throw new IllegalArgumentException("The referenced file has an invalid extension.");
 		name = name.substring(0, name.length() - DOT_DLL.length());
 		this.referenced = name;
-		hintPath = projectHome.relativize(referencedFile.toPath()).toString();
+		hintPath = projectHome.relativize(referencedFile.getAbsoluteFile().toPath()).toString();
 	}
 
 	public String getReferenced() {

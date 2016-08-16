@@ -1,12 +1,9 @@
 package com.github.randomcodeorg.netmaven.netmaven;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -17,7 +14,6 @@ import com.github.randomcodeorg.netmaven.netmaven.compiler.CompilationOutcome;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.NetCompiler;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.PathBuilder;
 import com.github.randomcodeorg.netmaven.netmaven.compiler.SelectingNetCompiler;
-import com.github.randomcodeorg.netmaven.netmaven.nuget.NugetExpander2;
 
 public abstract class AbstractNetMavenCompilationMojo extends AbstractNetMavenMojo {
 
@@ -55,7 +51,8 @@ public abstract class AbstractNetMavenCompilationMojo extends AbstractNetMavenMo
 		config.setTargetFramework(getTargetFramework());
 	}
 
-	protected CompilationConfig createCompilationConfig(String projectBuildDir, String outputDir, String artifactName) throws MojoExecutionException {
+	protected CompilationConfig createCompilationConfig(String projectBuildDir, String outputDir, String artifactName)
+			throws MojoExecutionException {
 		String packaging = getProject().getPackaging();
 		CompilationOutcome outcome = CompilationOutcome.DLL;
 		if ("exe".equals(packaging))
@@ -78,34 +75,6 @@ public abstract class AbstractNetMavenCompilationMojo extends AbstractNetMavenMo
 		if (!outputDirF.exists())
 			outputDirF.mkdirs();
 		return config;
-	}
-
-	protected void addDependencies(Collection<File> dependencies, MavenProject mavenProject) throws MojoExecutionException {
-		File f;
-		NugetExpander2 expander = new NugetExpander2(getLogger());
-		for (Artifact a : mavenProject.getArtifacts()) {
-			f = a.getFile();
-			if (f == null || !f.exists())
-				continue;
-			if (f.getName().endsWith(".dll"))
-				dependencies.add(f);
-			else if (f.getName().endsWith(".nuget")) {
-				addNugetDependencies(expander, dependencies, f);
-			}
-		}
-	}
-
-	protected void addNugetDependencies(NugetExpander2 expander, Collection<File> dependencies, File nuget)
-			throws MojoExecutionException {
-		getLogger().debug("Adding nuget dependencies from file: %s", nuget.getAbsolutePath());
-		File destination = new File(outputDir, "nuget");
-		try {
-			expander.expandDlls(getTargetFrameworkVersion(), nuget, destination, dependencies);
-		} catch (IOException e) {
-			throw new MojoExecutionException(String.format(
-					"Could not extract the contents of the nuget package at '%s'. Refer to the nested exception for more details.",
-					nuget.getAbsolutePath()), e);
-		}
 	}
 
 	public void execute() throws MojoExecutionException, MojoFailureException {

@@ -41,20 +41,20 @@
 	<dependencies>
 		<dependency>
 			<groupId>NUnit</groupId>
-			<artifactId>net40-nunit.framework</artifactId> 
+			<artifactId>NUnit</artifactId> 
 			<version>3.4.1</version>
 			<type>nuget</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>NUnit.Core.Engine</groupId>
-			<artifactId>net35-nunit.core.engine</artifactId>
+			<artifactId>NUnit.Core.Engine</artifactId>
 			<version>3.0.0-beta-4</version>
 			<type>nuget</type>
 		</dependency>
 		<dependency>
 			<groupId>NUnit.Console</groupId>
-			<artifactId>net35-nunit.console</artifactId>
+			<artifactId>NUnit.Console</artifactId>
 			<version>3.4.1</version>
 			<type>nuget</type>
 		</dependency>

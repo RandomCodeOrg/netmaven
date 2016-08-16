@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
@@ -38,7 +37,7 @@ public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 
 	@Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
 	private String outputDir;
-	
+
 	public NetMavenConfigMojo() {
 	}
 
@@ -111,7 +110,7 @@ public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 			getLog().debug("Adding source files in: " + s);
 			setupSourceDirectory(config, projectHome, new File(s));
 		}
-		for(String s : mavenProject.getTestCompileSourceRoots()){
+		for (String s : mavenProject.getTestCompileSourceRoots()) {
 			getLog().debug("Adding test source files in: " + s);
 			setupSourceDirectory(config, projectHome, new File(s));
 		}
@@ -130,13 +129,14 @@ public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 		}
 	}
 
-	protected void addDependencies(Path projectHomePath, ProjectConfig pc) {
+	protected void addDependencies(Path projectHomePath, ProjectConfig pc) throws MojoExecutionException {
 		Set<File> dependencies = new HashSet<>();
-		for (Artifact artifact : mavenProject.getArtifacts()) {
+		/*for (Artifact artifact : mavenProject.getArtifacts()) {
 			if (artifact.getFile().exists() && artifact.getFile().getName().endsWith(".dll")) {
 				dependencies.add(artifact.getFile());
 			}
-		}
+		}*/
+		addDependencies(dependencies, mavenProject);
 		if (dependencies.isEmpty())
 			return;
 		getLog().info("Configuring maven dependencies");

@@ -1,16 +1,21 @@
 package com.github.randomcodeorg.netmaven.netmaven;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.eclipse.aether.RepositorySystemSession;
 
 import com.github.randomcodeorg.netmaven.netmaven.compiler.PathBuilder;
+import com.github.randomcodeorg.netmaven.netmaven.nuget.NugetExpander2;
 
 public abstract class AbstractNetMavenMojo extends AbstractMojo {
 
@@ -25,6 +30,9 @@ public abstract class AbstractNetMavenMojo extends AbstractMojo {
 
 	@Parameter(defaultValue = "${repositorySystemSession}", required = true, readonly = true)
 	private RepositorySystemSession repoSession;
+	
+	@Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
+	private String outputDir;
 
 	private InternalLogger logger;
 	
@@ -107,4 +115,31 @@ public abstract class AbstractNetMavenMojo extends AbstractMojo {
 		return targetFramework;
 	}
 	
+	protected void addDependencies(Collection<File> dependencies, MavenProject mavenProject) throws MojoExecutionException {
+		File f;
+		NugetExpander2 expander = new NugetExpander2(getLogger());
+		for (Artifact a : mavenProject.getArtifacts()) {
+			f = a.getFile();
+			if (f == null || !f.exists())
+				continue;
+			if (f.getName().endsWith(".dll"))
+				dependencies.add(f);
+			else if (f.getName().endsWith(".nuget")) {
+				addNugetDependencies(expander, dependencies, f);
+			}
+		}
+	}
+	
+	protected void addNugetDependencies(NugetExpander2 expander, Collection<File> dependencies, File nuget)
+			throws MojoExecutionException {
+		getLogger().debug("Adding nuget dependencies from file: %s", nuget.getAbsolutePath());
+		File destination = new File(outputDir, "nuget");
+		try {
+			expander.expandDlls(getTargetFrameworkVersion(), nuget, destination, dependencies);
+		} catch (IOException e) {
+			throw new MojoExecutionException(String.format(
+					"Could not extract the contents of the nuget package at '%s'. Refer to the nested exception for more details.",
+					nuget.getAbsolutePath()), e);
+		}
+	}
 }
