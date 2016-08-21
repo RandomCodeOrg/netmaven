@@ -119,7 +119,7 @@ public class NetMavenConfigMojo extends AbstractNetMavenMojo {
 	protected void setupSourceDirectory(ProjectConfig config, Path projectHome, File f) {
 		if (!f.exists())
 			return;
-		if (f.isFile()) {
+		if (f.isFile() && !f.getName().startsWith(".")) {
 			Path filePath = f.toPath();
 			config.addSourceFile(projectHome.relativize(filePath).toString());
 		} else if (f.isDirectory()) {

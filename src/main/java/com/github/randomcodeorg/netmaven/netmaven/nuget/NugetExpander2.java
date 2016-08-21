@@ -32,10 +32,11 @@ public class NugetExpander2 {
 
 	private final InternalLogger logger;
 	private static final Pattern NUSPEC_PATTERN = Pattern.compile("[^/]+\\.nuspec$");
-	private static final Pattern DLL_PATTERN = Pattern.compile("^lib(\\/net[1-9](0|5))?\\/[^/]+\\.dll$");
-	private static final Pattern INDEPENDENT_PATTERN = Pattern.compile("^lib\\/[^/]+\\.dll$");
-
-	private static final String DEPENDENT_PATTERN_FORMAT = "^lib\\/%s\\/[^/]+\\.dll$";
+	private static final Pattern DLL_PATTERN = Pattern.compile("^(lib|tools)(\\/net[1-9](0|5))?\\/[^/]+\\.(dll|exe)$");
+	private static final Pattern INDEPENDENT_PATTERN = Pattern.compile("^lib\\/[^/]+\\.(dll|exe)$");
+	private static final String DEPENDENT_PATTERN_FORMAT = "^lib\\/%s\\/[^/]+\\.(dll|exe)$";
+	
+	private static final Pattern INDEPENDENT_TOOLS_PATTERN = Pattern.compile("^tools\\/[^/]+\\.(dll|exe)$");
 
 	public NugetExpander2(InternalLogger logger) {
 		this.logger = logger;
@@ -111,6 +112,19 @@ public class NugetExpander2 {
 				result.add(e);
 		}
 	}
+	
+	protected Set<ZipEntry> getIndependent(Set<ZipEntry> all) {
+		Set<ZipEntry> result = new HashSet<>();
+		for (ZipEntry entry : all) {
+			if (INDEPENDENT_PATTERN.matcher(entry.getName()).matches() || INDEPENDENT_TOOLS_PATTERN.matcher(entry.getName()).matches()){
+				logger.debug("Adding independent library: %s", entry.getName());
+				result.add(entry);
+			}
+					
+		}
+		return result;
+	}
+	
 
 	protected Set<FrameworkVersion> getFrameworkVersions(Set<ZipEntry> all) {
 		Set<String> versions = new HashSet<>();
@@ -135,14 +149,7 @@ public class NugetExpander2 {
 		return result;
 	}
 
-	protected Set<ZipEntry> getIndependent(Set<ZipEntry> all) {
-		Set<ZipEntry> result = new HashSet<>();
-		for (ZipEntry entry : all) {
-			if (INDEPENDENT_PATTERN.matcher(entry.getName()).matches())
-				result.add(entry);
-		}
-		return result;
-	}
+	
 
 	protected boolean isDll(ZipFile file, ZipEntry entry) {
 		return DLL_PATTERN.matcher(entry.getName()).matches();

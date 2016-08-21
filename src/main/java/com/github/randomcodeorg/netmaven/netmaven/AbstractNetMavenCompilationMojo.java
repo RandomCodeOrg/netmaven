@@ -1,6 +1,8 @@
 package com.github.randomcodeorg.netmaven.netmaven;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,10 +105,25 @@ public abstract class AbstractNetMavenCompilationMojo extends AbstractNetMavenMo
 		String filePath = c.compile();
 		if (isArtifact(config, filePath))
 			mavenProject.getArtifact().setFile(new File(filePath));
+		copyDependencies(config);
 		if (requiresRecycle(config)) {
 			setupRecycle(config);
 			beforeRecycle(config);
 			cycle(config);
+		}
+	}
+
+	protected void copyDependencies(CompilationConfig config) {
+		File target;
+		for (File f : config.getDependencies()) {
+			target = PathBuilder.create(config.getOutputDirectory()).sub(f.getName()).file();
+			if (target.exists())
+				continue;
+			try {
+				Files.copy(f.toPath(), target.toPath());
+			} catch (IOException e) {
+				getLogger().warn("Could not copy the dependency file '%s' to the output directory.", f.getName());
+			}
 		}
 	}
 
